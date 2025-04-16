@@ -42,4 +42,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+  public function roles(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+  {
+    return $this->belongsToMany(Roles::class, 'roles_users', 'idUsuario', 'idRol')
+      ->withPivot('fechaCreacion', 'fechaModificacion');
+  }
+
 }

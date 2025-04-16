@@ -53,7 +53,8 @@ Route::middleware('guest')->group(function () {
   // Cerrar sesión
   Route::post('/auth/logout', [LoginBasic::class, 'logout'])->name('logout');
   // Rutas de registro y recuperación de contraseña
-  Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth-register-basic');
+  Route::get('/auth/register-basic', [RegisterBasic::class, 'index'])->name('auth.register');
+  Route::post('/auth/register-basic', [RegisterBasic::class, 'register'])->name('auth.register.submit');
   Route::get('/auth/forgot-password-basic', [ForgotPasswordBasic::class, 'index'])->name('auth-reset-password-basic');
 });
 
@@ -61,6 +62,15 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
   // Main Page Route
   Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
+
+  //grupo para administracion de usuarios con prefijo
+  Route::prefix('administracion')->group(function () {
+    Route::get('/usuarios', [RegisterBasic::class, 'administracion_usuarios'])->name('administracion_usuarios');
+  }); // ejemplo link
+
+
+
+
 
   // layout
   Route::get('/layouts/without-menu', [WithoutMenu::class, 'index'])->name('layouts-without-menu');
