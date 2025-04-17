@@ -44,8 +44,8 @@ class RegisterBasic extends Controller
 
   public function administracion_usuarios()
   {
-    $users = User::with('roles')->get();
-    $roles = Roles::all();
+
+    $UsuariosRoles = User::with('roles')->get();
 
 //    dd($users, $roles);
 
