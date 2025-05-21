@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Administracion\EmpleadoController;
+use App\Http\Controllers\Administracion\IndicadorProductividadController;
+use App\Http\Controllers\Administracion\NominaController;
+use App\Http\Controllers\Administracion\PrestacionController;
+use App\Http\Controllers\Administracion\ReportesController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\dashboard\Analytics;
 use App\Http\Controllers\layouts\WithoutMenu;
@@ -63,10 +68,44 @@ Route::middleware('auth')->group(function () {
   // Main Page Route
   Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
 
-  //grupo para administracion de usuarios con prefijo
-  Route::prefix('administracion')->group(function () {
-    Route::get('/usuarios', [RegisterBasic::class, 'administracion_usuarios'])->name('administracion_usuarios');
-  }); // ejemplo link
+  Route::prefix('administracion')
+    ->name('administracion.')
+    ->group(function(){
+      // Listado de usuarios
+      Route::get('usuarios', [RegisterBasic::class, 'administracion_usuarios'])
+        ->name('usuarios.index');
+
+      // CRUD completo de Empleados (incluye update)
+      Route::resource('empleados', EmpleadoController::class)
+        ->parameters(['empleados' => 'empleado'])
+        ->except(['show']);
+
+      Route::resource('nominas', NominaController::class)
+        ->parameters(['nominas'=>'nomina'])
+        ->except(['show','edit','create']);
+
+      Route::resource('prestaciones', PrestacionController::class)
+        ->parameters(['prestaciones'=>'prestacion'])
+        ->except(['show','create','edit']);
+
+      Route::resource('productividad', IndicadorProductividadController::class)
+        ->parameters(['productividad'=>'item'])
+        ->only(['index','store','update','destroy']);
+
+      // Reportes
+      Route::get('reportes',                 [ReportesController::class,'index'])
+        ->name('reportes.index');
+      Route::get('reportes/nominas',         [ReportesController::class,'nominas'])
+        ->name('reportes.nominas');
+      Route::get('reportes/prestaciones',    [ReportesController::class,'prestaciones'])
+        ->name('reportes.prestaciones');
+      Route::get('reportes/productividad',   [ReportesController::class,'productividad'])
+        ->name('reportes.productividad');
+    });
+
+
+
+
 
 
 
