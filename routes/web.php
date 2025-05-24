@@ -66,7 +66,7 @@ Route::middleware('guest')->group(function () {
 // Rutas protegidas por autenticación (middleware 'auth')
 Route::middleware('auth')->group(function () {
   // Main Page Route
-  Route::get('/', [Analytics::class, 'index'])->name('dashboard-analytics');
+  Route::get('/', [ReportesController::class,'index']);
 
   Route::prefix('administracion')
     ->name('administracion.')
